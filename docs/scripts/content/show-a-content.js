@@ -19,7 +19,10 @@ const HTMLify = (str, ptns) => {
 export const showAContent = async result => {
         const li = document.createElement("li");
         doc("contentsUl").append(li);    
-        addDOM(li, [{ tag: "span", content: (new Date(result.date)).toLocaleString("ja") }]);
+        addDOM(li, [
+            { tag: "span", content: (new Date(result.date)).toLocaleString("ja") },
+            { tag: "span", content: /*sender*/ }
+        ]);
         const file = result.body;
         switch (file.type.split("/")[0]) {
             case "text":
