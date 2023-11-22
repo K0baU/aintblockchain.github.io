@@ -73,11 +73,6 @@ form {
     display: flex;
 }
 
-#pmw {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-}
-
 #peersForm,
 #contentsUl {
     flex: 1;
@@ -173,19 +168,27 @@ button {
     color: var(--bg);
 }
 
-#amountInput {
-    grid-column-start: 1;
-    grid-column-end: 4;
-    border-radius: var(--bd-rad) var(--bd-rad) 0 0;
-    text-align: end;
+#pmw {
+    display: flex;
+}
+
+#pm {
+    flex: 0 0;
+    display: flex;
+    flex-direction: column;
 }
 
 #plus {
-    border-radius: 0 0 0 var(--bd-rad);
+    border-radius: var(--bd-rad) 0 0 0;
 }
 
 #minus {
-    border-radius: 0 0 var(--bd-rad) 0;
+    border-radius: 0 0 0 var(--bd-rad);
+}
+
+#amountInput {
+    border-radius: 0 var(--bd-rad) var(--bd-rad) 0;
+    text-align: end;
 }
 
 main ul {
