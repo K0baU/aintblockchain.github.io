@@ -1,18 +1,18 @@
 import { log } from "./log.js";
 import { doc } from "./doc.js";
 import { opr } from "./db.js";
+import { receive } from "./receive.js";
 import { cid } from "../content/id.js";
 import { showAPeer } from "../peer/show-a-peer.js";
 import { addContent } from "../content/add.js";
 
 const wshost = "wss://wab.sabae.cc";
 const onlineMsg = "🟢オンライン";
-const config = { iceServers: [{ urls: "stun:stun.l.google.com:19302" }] };
 export let conns = {};
-let creditOuts = {}, onlines = {}, mimes = {};
+let creditOuts = {}, onlines = {};
 
-        let user;
-        opr.for({ store:"keypairs", f:rec=>user = rec, end: async()=>{
+let user;
+        opr.for({ store:"keypairs", f: rec => user = rec, end: async()=>{
             let isNew;
             if (!user) {                
                 user = await crypto.subtle.generateKey(
@@ -25,117 +25,20 @@ let creditOuts = {}, onlines = {}, mimes = {};
                 );
                 isNew = true;
             }
-            crypto.subtle.exportKey("jwk", user.publicKey).then((pub) => {
+            crypto.subtle.exportKey("jwk", user.publicKey).then(pub => {
+                const myId = pub.x + pub.y;
                 if (isNew)
-                    opr.crud({ store:"keypairs", op:"add", rec:{body:user, id:pub.x + pub.y} });
-                doc("idSummary").append(pub.x.slice(0, 4) + "...");
-                doc("idDetails").append(pub.x + pub.y);
+                    opr.crud({
+                        store: "keypairs",
+                        op: "add",
+                        rec: { body: user, id: myId }
+                    });
+                doc("idSummary").append(myId.slice(0, 4) + "...");
+                doc("idDetails").append(myId);
                 let socket = new WebSocket(wshost);
-                const socketSend = (obj) => socket.send(JSON.stringify(obj));
-
-                const receive = async e => {
-                    switch (typeof e.data) {
-                        case "string":
-                            const data = JSON.parse(e.data);
-                            switch (data.type) {
-                                case "peer":
-                                    const id = data.body;
-                                    if (id == pub.x + pub.y) {
-                                        break;
-                                    }
-                                    log("offer")
-                                    setupConn(id);
-                                    break;
-                                case "description":
-                                    if (await crypto.subtle.verify(
-                                        {
-                                            name: "ECDSA",
-                                            hash: { name: "SHA-384" },
-                                        },
-                                        await crypto.subtle.importKey(
-                                            "jwk",
-                                            data.body.pub,
-                                            {
-                                                name: "ECDSA",
-                                                namedCurve: "P-384",
-                                            },
-                                            true,
-                                            ["verify"],
-                                        ),
-                                        new Uint8Array(data.body.sign).buffer,
-                                        (new TextEncoder()).encode(data.body.descriptionStr),
-                                    )) {
-                                        const description = JSON.parse(data.body.descriptionStr);
-                                        log("answer")
-                                        setupConn(data.body.pub.x + data.body.pub.y, description);
-                                    };
-                                    break;
-                                case "mime":
-                                    mimes[data.body.cid] = data.body.type;
-                                    break;
-                                default:
-                                    break;
-                            }
-                            break;
-                        default:
-                            const id = await cid(e.data);
-                            if (mimes[id]) {
-                                const blob = new Blob([e.data], { type: mimes[id] });
-                                addContent("content", blob);
-                            } else log("no mime received");
-                            delete mimes[id];
-                            break;
-                    }
-                };
-                const setupConn = (id, description) => {
-                    if (description && description.type == "answer") {
-                        conns[id].setRemoteDescription(description);
-                        return;
-                    }
-                    // Create the local connection and its event listeners
-                    const con = new RTCPeerConnection(config);
-                    con.onconnectionstatechange = () => {
-                        log(con.connectionState);
-                        switch (con.connectionState) {
-                            case "connected":
-                                if (creditOuts[id]) {
-                                    onlines[id].textContent = onlineMsg;
-                                } else {
-                                    const newPeer = { id, name: "", credit: 0 };
-                                    opr.crud({ store: "peers", op: "add", rec: newPeer, callback: showAPeer });
-                                }
-                                break;
-                            case "disconnected":
-                                onlines[id].textContent = "";
-                                break;
-                        }
-                    };
-                    // Set up the ICE candidates for the two peers
-                    con.onicecandidate = async e => {
-                        log("ice");
-                        if (!e.candidate) {
-                            socketSend({
-                                type: "transport", body: {
-                                    payload: {
-                                        type: "description", body: {
-                                            descriptionStr: JSON.stringify(con.localDescription),
-                                            sign: Array.from(new Uint8Array(await crypto.subtle.sign(
-                                                {
-                                                    name: "ECDSA",
-                                                    hash: { name: "SHA-384" },
-                                                },
-                                                user.privateKey,
-                                                (new TextEncoder()).encode(JSON.stringify(con.localDescription)),
-                                            ))),
-                                            pub
-                                        }
-                                    }, to: id
-                                }
-                            });
-                        }
-                    }
+                const socketSend = obj => socket.send(JSON.stringify(obj));
                     con.ondatachannel = e => {
-                        e.channel.onmessage = receive;
+                        e.channel.onmessage = () => receive(e, pub, socketSend);
                     };
                     if (!description) {
                         conns[id] = con;
@@ -157,9 +60,9 @@ let creditOuts = {}, onlines = {}, mimes = {};
                 const setupWs = () => {
                     socket.onopen = () => {
                         log("socket opened");
-                        socketSend({ type: "id", body: pub.x + pub.y });
+                        socketSend({ type: "id", body: myId });
                     };
-                    socket.onmessage = receive;
+                    socket.onmessage = () => receive(e, pub, socketSend);
                     socket.onclose = () => {
                         log("socket closed");
                         log("reconnecting to server");
@@ -170,23 +73,3 @@ let creditOuts = {}, onlines = {}, mimes = {};
                 setupWs();
             });
         }});
-        const increaseCredit = (multiplier) => {
-            const id = (new FormData(doc("peersForm"))).get("target");
-            const amount = Number(doc("amountInput").value);
-            opr.crud({ store: "peers", op: "get", rec: id, callback: rec => {
-                const newRec = rec;
-                newRec.credit += amount * multiplier;
-                opr.crud({ store: "peers", op: "put", rec: newRec, callback: () => {
-                    log(
-                        `${rec.name}: ${rec.credit} => ${newRec.credit} (${multiplier >= 0 ? "+" : "-"}${amount})`
-                    );
-                    creditOuts[id].value = newRec.credit;
-                } });
-            } });
-        };
-        document.getElementById('plus').onclick = () => {
-            increaseCredit(1);
-        };
-        document.getElementById('minus').onclick = () => {
-            increaseCredit(-1);
-        };
