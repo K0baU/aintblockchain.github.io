@@ -4,7 +4,7 @@ import { opr } from "./db.js";
 const config = { iceServers: [{ urls: "stun:stun.l.google.com:19302" }] };
 const mimes = {};
 
-const setupConn = (id, pub, socketSend, description) => {
+const setupConn = (id, pub, description) => {
                     if (description && description.type == "answer") {
                         conns[id].setRemoteDescription(description);
                         return;
@@ -52,7 +52,7 @@ const setupConn = (id, pub, socketSend, description) => {
                         }
                     }
 
-export const receive = async (e, pub, socketSend) => {
+export const receive = async (e, pub) => {
     const myId = pub.x + pub.y;
                     switch (typeof e.data) {
                         case "string":
@@ -64,7 +64,7 @@ export const receive = async (e, pub, socketSend) => {
                                         break;
                                     }
                                     log("offer");
-                                    setupConn(id, pub, socketSend);
+                                    setupConn(id, pub);
                                     break;
                                 case "description":
                                     if (await crypto.subtle.verify(
@@ -87,7 +87,7 @@ export const receive = async (e, pub, socketSend) => {
                                     )) {
                                         const description = JSON.parse(data.body.descriptionStr);
                                         log("answer");
-                                        setupConn(data.body.pub.x + data.body.pub.y, pub, socketSend, description);
+                                        setupConn(data.body.pub.x + data.body.pub.y, pub, description);
                                     };
                                     break;
                                 case "mime":
