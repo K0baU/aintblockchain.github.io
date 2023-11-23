@@ -1,5 +1,6 @@
 import { log } from "../lib/log.js";
 import { doc, addDOM } from "../lib/doc.js";
+import { opr } from "../lib/db.js";
 import { encodeId } from "./id.js";
 import { aPtn, tagPtn } from "./patterns.js";
 
@@ -16,12 +17,13 @@ const HTMLify = (str, ptns) => {
             , str);
     };
 
-export const showAContent = async result => {
-        const li = document.createElement("li");
-        doc("contentsUl").append(li);    
+const show = async (result, sender) => {
+    const li = document.createElement("li");
+        doc("contentsUl").append(li);
+        const senderName = sender ? sender.name || "ななっしー" : "自分";
         addDOM(li, [
             { tag: "span", content: (new Date(result.date)).toLocaleString("ja") },
-            { tag: "span", content: /*sender*/ }
+            { tag: "span", content: senderName }
         ]);
         const file = result.body;
         switch (file.type.split("/")[0]) {
@@ -57,4 +59,13 @@ export const showAContent = async result => {
             messageInput.dispatchEvent(new InputEvent('input'));
             messageInput.focus();
         };
-    };
+}
+
+export const showAContent = result => {
+    if (result.sender) {
+        opr.crud({
+            store: "peers", op: "get", rec: result.sender,
+            callback: sender => show(result, sender)
+        });
+    } else show(result);
+};
