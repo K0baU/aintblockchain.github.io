@@ -1,3 +1,4 @@
+import {log} from "./log.js";
 const wshost = "wss://wab.sabae.cc";
 
 let socket = new WebSocket(wshost);
