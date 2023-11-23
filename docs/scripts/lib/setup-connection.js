@@ -1,5 +1,5 @@
 const onlineMsg = "🟢オンライン";
-const setupConn = (id, pub, description) => {
+export const setupConn = (id, pub, description) => {
     if (description && description.type == "answer") {
         conns[id].setRemoteDescription(description);
         return;
