@@ -1,4 +1,9 @@
-import {log} from "./log.js";
+import {
+    log
+} from "./log.js";
+import {
+    receive
+} from "./receive.js";
 const wshost = "wss://wab.sabae.cc";
 
 let socket = new WebSocket(wshost);
@@ -7,7 +12,9 @@ export const socketSend = obj => socket.send(JSON.stringify(obj));
 export const setupWs = pub => {
     socket.onopen = () => {
         log("socket opened");
-        socketSend({ type: "id", body: pub.x + pub.y });
+        socketSend({
+            type: "id", body: pub.x + pub.y
+        });
     };
     socket.onmessage = () => receive(e, pub);
     socket.onclose = () => {
