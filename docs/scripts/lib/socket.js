@@ -16,7 +16,7 @@ export const setupWs = pub => {
             type: "id", body: pub.x + pub.y
         });
     };
-    socket.onmessage = () => receive(e, pub);
+    socket.onmessage = e => receive(e, pub);
     socket.onclose = () => {
         log("socket closed");
         log("reconnecting to server");
