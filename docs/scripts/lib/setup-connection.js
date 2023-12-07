@@ -1,4 +1,9 @@
 const onlineMsg = "🟢オンライン";
+const config = {
+    iceServers: [{
+        urls: "stun:stun.l.google.com:19302"
+    }]
+};
 export const setupConn = (id, pub, description) => {
     if (description && description.type == "answer") {
         conns[id].setRemoteDescription(description);
