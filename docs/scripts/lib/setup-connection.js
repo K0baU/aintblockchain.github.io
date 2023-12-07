@@ -4,6 +4,7 @@ const config = {
         urls: "stun:stun.l.google.com:19302"
     }]
 };
+const conns = {};
 export const setupConn = (id, pub, description) => {
     if (description && description.type == "answer") {
         conns[id].setRemoteDescription(description);
@@ -70,7 +71,6 @@ export const setupConn = (id, pub, description) => {
             con.setLocalDescription(offer);
     });
 } else {
-    log("createAnswer");
     new Promise(resolve => {
         resolve(description)
     })
