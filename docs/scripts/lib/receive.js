@@ -8,11 +8,6 @@ import {
     setupConn
 } from "./setup-connection.js";
 
-const config = {
-    iceServers: [{
-        urls: "stun:stun.l.google.com:19302"
-    }]
-};
 const mimes = {};
 
 export const receive = async (e, pub) => {
