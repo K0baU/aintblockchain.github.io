@@ -3,7 +3,7 @@ import { opr } from "../lib/db.js";
 import { tagPtn } from "./patterns.js";
 import { showContents } from "./show-contents.js";
 import { send } from "./send.js";
-import { conns } from "../lib/connect.js";
+import { conns } from "../lib/setup-connection.js";
 
 export const addContent = async (type, body, sender) => {
                 const id = await cid(body);
