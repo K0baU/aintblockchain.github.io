@@ -7,7 +7,6 @@ import { cid } from "../content/id.js";
 import { showAPeer } from "../peer/show-a-peer.js";
 import { addContent } from "../content/add.js";
 
-export let conns = {};
 let creditOuts = {}, onlines = {};
 
 let user;
