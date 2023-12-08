@@ -1,5 +1,5 @@
 import { log } from "./log.js";
-import { onlineMsg } from "./doc.js";
+import { onlineMsg, creditOuts } from "./doc.js";
 import { opr } from "./db.js";
 import { user } from "./connect.js";
 import { onlines, showAPeer } from "../peer/show-a-peer.js";
@@ -11,7 +11,6 @@ const config = {
     }]
 };
 export const conns = {};
-let creditOuts = {};
 export const setupConn = (id, pub, description) => {
     if (description && description.type == "answer") {
         conns[id].setRemoteDescription(description);
