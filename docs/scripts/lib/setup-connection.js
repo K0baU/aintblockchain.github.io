@@ -24,7 +24,7 @@ export const setupConn = (id, pub, description) => {
         switch (con.connectionState) {
             case "connected":
                 if (creditOuts[id]) {
-                    onlines[id].textContent = onlineMsg;
+                    if (onlines[id]) onlines[id].textContent = onlineMsg;
                 } else {
                     const newPeer = {
                         id,
@@ -37,7 +37,7 @@ export const setupConn = (id, pub, description) => {
                 }
                 break;
             case "disconnected":
-                onlines[id].textContent = "";
+                if (onlines[id]) onlines[id].textContent = "";
                 break;
         }
     };
