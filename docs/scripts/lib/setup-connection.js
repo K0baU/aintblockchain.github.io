@@ -1,3 +1,5 @@
+import { log } from "./log.js";
+
 const onlineMsg = "🟢オンライン";
 const config = {
     iceServers: [{
