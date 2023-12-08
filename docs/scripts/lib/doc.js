@@ -9,3 +9,5 @@ export const addDOM = (par, children, add = "append") => {
         } else par[add](child);
     }
 };
+
+export const onlineMsg = "🟢オンライン";
