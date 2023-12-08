@@ -11,3 +11,4 @@ export const addDOM = (par, children, add = "append") => {
 };
 
 export const onlineMsg = "🟢オンライン";
+export let creditOuts = {};
