@@ -1,4 +1,5 @@
 import { log } from "./log.js";
+import { socketSend } from "./socket.js";
 
 const onlineMsg = "🟢オンライン";
 const config = {
