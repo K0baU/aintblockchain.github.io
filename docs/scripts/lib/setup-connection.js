@@ -1,4 +1,5 @@
 import { log } from "./log.js";
+import { user } from "./connect.js";
 import { socketSend } from "./socket.js";
 
 const onlineMsg = "🟢オンライン";
