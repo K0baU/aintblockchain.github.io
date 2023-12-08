@@ -9,6 +9,7 @@ const config = {
     }]
 };
 export const conns = {};
+let creditOuts = {}, onlines = {};
 export const setupConn = (id, pub, description) => {
     if (description && description.type == "answer") {
         conns[id].setRemoteDescription(description);
