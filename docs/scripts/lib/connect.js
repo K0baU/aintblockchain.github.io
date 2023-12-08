@@ -6,8 +6,6 @@ import { cid } from "../content/id.js";
 import { showAPeer } from "../peer/show-a-peer.js";
 import { addContent } from "../content/add.js";
 
-let creditOuts = {}, onlines = {};
-
 export let user;
 opr.for({ store:"keypairs", f: rec => user = rec, end: async () => {
     let isNew;
