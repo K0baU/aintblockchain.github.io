@@ -1,5 +1,7 @@
 import { log } from "./log.js";
+import { opr } from "./db.js";
 import { user } from "./connect.js";
+import { onlines } from "./show-a-peer.js";
 import { socketSend } from "./socket.js";
 
 const onlineMsg = "🟢オンライン";
@@ -9,7 +11,7 @@ const config = {
     }]
 };
 export const conns = {};
-let creditOuts = {}, onlines = {};
+let creditOuts = {};
 export const setupConn = (id, pub, description) => {
     if (description && description.type == "answer") {
         conns[id].setRemoteDescription(description);
