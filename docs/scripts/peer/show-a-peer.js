@@ -1,6 +1,7 @@
 import { doc, addDOM } from "../lib/doc.js";
 import { opr } from "../lib/db.js";
 
+export const onlines = {};
 export const showAPeer = rec => {
     const radio = document.createElement("input");
     radio.type = "radio";
