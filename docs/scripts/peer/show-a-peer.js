@@ -1,5 +1,6 @@
 import { doc, addDOM } from "../lib/doc.js";
 import { opr } from "../lib/db.js";
+import { conns } from "../lib/setup-connection.js";
 
 export const onlines = {};
 export const showAPeer = rec => {
