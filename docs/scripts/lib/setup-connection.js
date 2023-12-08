@@ -1,7 +1,7 @@
 import { log } from "./log.js";
 import { opr } from "./db.js";
 import { user } from "./connect.js";
-import { onlines } from "./show-a-peer.js";
+import { onlines } from "../peer/show-a-peer.js";
 import { socketSend } from "./socket.js";
 
 const onlineMsg = "🟢オンライン";
