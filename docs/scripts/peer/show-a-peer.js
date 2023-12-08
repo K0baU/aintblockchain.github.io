@@ -1,4 +1,4 @@
-import { doc, addDOM } from "../lib/doc.js";
+import { doc, addDOM, onlineMsg } from "../lib/doc.js";
 import { opr } from "../lib/db.js";
 import { conns } from "../lib/setup-connection.js";
 
