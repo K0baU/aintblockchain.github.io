@@ -1,10 +1,10 @@
 import { log } from "./log.js";
+import { onlineMsg } from "./doc.js";
 import { opr } from "./db.js";
 import { user } from "./connect.js";
 import { onlines, showAPeer } from "../peer/show-a-peer.js";
 import { socketSend } from "./socket.js";
 
-const onlineMsg = "🟢オンライン";
 const config = {
     iceServers: [{
         urls: "stun:stun.l.google.com:19302"
