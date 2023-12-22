@@ -13,6 +13,9 @@ import {
 import {
     cid
 } from "../content/id.js";
+import {
+    addContent
+} from "../content/add.js";
 
 const mimes = {};
 
