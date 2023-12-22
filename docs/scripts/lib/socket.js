@@ -4,23 +4,24 @@ import {
 import {
     receive
 } from "./receive.js";
+import{
+    sendName
+} from "./connect.js"
 const wshost = "wss://wab.sabae.cc";
 
-let socket = new WebSocket(wshost);
-
-export const socketSend = obj => socket.send(JSON.stringify(obj));
-export const setupWs = pub => {
+let socket;
+const open = ()=> {
+    socket = new WebSocket(wshost);
     socket.onopen = () => {
         log("socket opened");
-        socketSend({
-            type: "id", body: pub.x + pub.y
-        });
+        sendName();
     };
-    socket.onmessage = e => receive(e, pub);
+    socket.onmessage = receive;
     socket.onclose = () => {
         log("socket closed");
         log("reconnecting to server");
-        socket = new WebSocket(wshost);
-        setupWs(pub);
+        open();
     };
 };
+open();
+export const socketSend = obj => socket.send(JSON.stringify(obj));
