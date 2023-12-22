@@ -21,7 +21,8 @@ import {
 } from "../content/add.js";
 
 export let user;
-export let sendName=()=>{};
+export let pub;
+export let sendName = ()=> {};
 opr.for({
     store: "keypairs", f: rec => user = rec, end: async () => {
         let isNew;
@@ -36,7 +37,8 @@ opr.for({
             );
             isNew = true;
         }
-        crypto.subtle.exportKey("jwk", user.publicKey).then(pub => {
+        crypto.subtle.exportKey("jwk", user.publicKey).then(pubKey => {
+            pub = pubKey;
             const myId = pub.x + pub.y;
             if (isNew)
                 opr.crud({
