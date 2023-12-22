@@ -10,6 +10,9 @@ import {
 import {
     pub
 }from "./connect.js";
+import {
+    cid
+} from "../content/id.js";
 
 const mimes = {};
 
