@@ -4,6 +4,9 @@ import { opr } from "./db.js";
 import { user } from "./connect.js";
 import { onlines, showAPeer } from "../peer/show-a-peer.js";
 import { socketSend } from "./socket.js";
+import {
+    receive
+} from "./receive.js";
 
 const config = {
     iceServers: [{
@@ -67,7 +70,7 @@ export const setupConn = (id, pub, description) => {
         }
     }
     con.ondatachannel = e => {
-        e.channel.onmessage = () => receive(e, pub);
+        e.channel.onmessage = receive;
     };
     if (!description) {
         conns[id] = con;
