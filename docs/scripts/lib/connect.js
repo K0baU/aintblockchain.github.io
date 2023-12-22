@@ -54,7 +54,8 @@ opr.for({
                 socketSend({
                     type: "id", body: pub.x + pub.y
                 });
-            }
+            };
+            sendName();
         });
     }
 });
