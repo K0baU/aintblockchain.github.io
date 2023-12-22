@@ -7,10 +7,13 @@ import {
 import {
     setupConn
 } from "./setup-connection.js";
+import {
+    pub
+}from "./connect.js";
 
 const mimes = {};
 
-export const receive = async (e, pub) => {
+export const receive = async (e) => {
     const myId = pub.x + pub.y;
     switch (typeof e.data) {
         case "string":
