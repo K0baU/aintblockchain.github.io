@@ -14,6 +14,6 @@ export const addContent = async (type, body, sender) => {
                         newRec.tag = Array.from((await body.text()).matchAll(tagPtn))
                             .map(result => result[1]);
                     opr.crud({ store: "contents", op: "add", rec: newRec, callback: showContents });
-                    for (const id in conns) sendFile(conns[id], body);
+                    for (const id in conns) send(conns[id], body);
                 } });
     };
