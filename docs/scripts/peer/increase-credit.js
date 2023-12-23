@@ -1,4 +1,5 @@
 import { doc } from "../lib/doc.js";
+import { opr } from "../lib/db.js";
 
 const increaseCredit = (multiplier) => {
             const id = (new FormData(doc("peersForm"))).get("target");
