@@ -187,7 +187,7 @@ button {
 }
 
 #amountInput {
-    border-radius: 0 var(--bd-rad) var(--bd-rad) 0;
+    border-radius: var(--bd-rad);
     text-align: end;
 }
 
