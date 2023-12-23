@@ -179,11 +179,11 @@ button {
 }
 
 #plus {
-    border-radius: var(--bd-rad) 0 0 0;
+    border-radius: var(--bd-rad) 0 0 var(--bd-rad);
 }
 
 #minus {
-    border-radius: 0 0 0 var(--bd-rad);
+    border-radius: 0 var(--bd-rad) var(--bd-rad) 0;
 }
 
 #amountInput {
