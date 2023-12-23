@@ -24,12 +24,15 @@
                 <summary id="idSummary">ID:</summary>
             </details>
             <form id="peersForm"></form>
-            <form id="pmw">
-                <span id="pm">
-                    <button type="button" id="plus">+</button>
-                    <button type="button" id="minus">-</button>
-                </span>
-                <input type="number" id="amountInput" min="0" value="100" placeholder="418">
+            <form id="pmw" oninput="copy.value=amountInput.value">
+                <button type="button" id="plus">
+                    ❤
+                    *<input type="number" id="amountInput" name="amountInput" min="0" value="1" placeholder="418">
+                </button>
+                <button type="button" id="minus">
+                    💔
+                    *<output name="copy" for="amountInput">
+                </button>
             </form>
         </div>
         <div id="center">
